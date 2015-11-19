@@ -19,8 +19,16 @@ module InitializerHelpers
     skip(console?, &block)
   end
 
+  def skip_rake_generators_include_jobs_work &block
+    skip(generators? || (rake? && !rake_jobs_work?), &block)
+  end
+
   def rake?
     File.basename($0) == 'rake'
+  end
+
+  def rake_jobs_work?
+    Rake.application.top_level_tasks.include?('jobs:work')
   end
 
   def console?
